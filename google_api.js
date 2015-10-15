@@ -15,22 +15,25 @@ var TOKEN_PATH = TOKEN_DIR + 'gmail-api-quickstart.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
-    var clientSecret = credentials.installed.client_secret;
-    var clientId = credentials.installed.client_id;
-    var redirectUrl = credentials.installed.redirect_uris[0];
-    var auth = new googleAuth();
-    var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+function authorize(credentials) {
+    return new Promise(function(resolve, reject){
+        var clientSecret = credentials.installed.client_secret;
+        var clientId = credentials.installed.client_id;
+        var redirectUrl = credentials.installed.redirect_uris[0];
+        var auth = new googleAuth();
+        var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-    // Check if we have previously stored a token.
-    fs.readFile(TOKEN_PATH, function(err, token) {
-        if (err) {
-            getNewToken(oauth2Client, callback);
-        } else {
-            oauth2Client.credentials = JSON.parse(token);
-            callback(oauth2Client);
-        }
-    });
+        // Check if we have previously stored a token.
+        fs.readFile(TOKEN_PATH, function(err, token) {
+            if (err) {
+                getNewToken(oauth2Client)
+                return Promise.reject()
+            } else {
+                oauth2Client.credentials = JSON.parse(token)
+                return resolve(oauth2Client);
+            }
+        });
+    })
 }
 
 /**
