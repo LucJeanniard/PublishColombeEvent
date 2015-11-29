@@ -1,23 +1,33 @@
-
-
 var google = require('googleapis');
 
 function extractUrlFromMessage(message){
 
     var base64 = require('js-base64').Base64;
     var bodyData = message.payload.parts[0].body.data;
-    var body = base64.decode(bodyData.replace(/-/g, '+').replace(/_/g, '/'));
+    console.log("bodyData = " + bodyData)
+    try{
+        var body = base64.decode(bodyData.replace(/-/g, '+').replace(/_/g, '/'));
 
-    var regex_str = "http:\/\/www.colombe.fr\/administration\/.*";
-    var match = body.match(regex_str);
-    var url = match[0];
+        var regex_str = "http:\/\/www.colombe.fr\/administration\/.*";
+        var match = body.match(regex_str);
+        var url = match[0];
+
+    } catch (e) {
+        console.log("ERROR in extractUrlFromMessage : " + e.message)
+        url = "";
+    }
     return url
 }
 
 function listCCBEMails(auth) {
     return new Promise(function(resolve, reject)
     {
+        console.log("Hello1");
+
         var gmail = google.gmail('v1');
+
+        console.log("Hello2");
+
         gmail.users.messages.list({
             auth: auth,
             userId: 'me',
@@ -28,6 +38,8 @@ function listCCBEMails(auth) {
                 console.log('The API returned an error: ' + err);
                 return;
             }
+            console.log("Hello");
+
             console.log(response);
             var messages = response.messages;
             console.log(messages.length);

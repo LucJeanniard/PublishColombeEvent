@@ -1,10 +1,12 @@
 By     = require('selenium-webdriver').By,
 until  = require('selenium-webdriver').until;
 
+
 var webdriver = require('selenium-webdriver');
 var driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
+
 
 function publishEvent(url)
 {

@@ -3,7 +3,7 @@ var readline = require('readline');
 var googleAuth = require('google-auth-library');
 
 var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-var TOKEN_DIR = 't:' + '/.credentials/';
+var TOKEN_DIR = 'C:' + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'gmail-api-quickstart.json';
 
 
@@ -29,7 +29,7 @@ function authorize(credentials) {
                 getNewToken(oauth2Client)
                 return Promise.reject()
             } else {
-                oauth2Client.credentials = JSON.parse(token)
+                oauth2Client.credentials = JSON.parse(token);
                 return resolve(oauth2Client);
             }
         });

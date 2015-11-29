@@ -19,7 +19,9 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
             var publishActions = []
 
             for(var i=0; i<urls.length; i++){
-                publishActions.push(colombeSite.publishEvent(urls[i]))
+                if(urls[i] != ""){
+                    publishActions.push(colombeSite.publishEvent(urls[i]))
+                }
             }
 
             return Promise.all(publishActions)
